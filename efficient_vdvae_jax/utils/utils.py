@@ -34,6 +34,7 @@ def get_logdir(working_dir='.'):
 def create_tb_writer(mode):
     logdir = get_logdir()
     tbdir = os.path.join(logdir, mode)
+    print(f"Tensorboard logs will be saved at: {tbdir}")
     os.makedirs(logdir, exist_ok=True)
     os.makedirs(tbdir, exist_ok=True)
     writer = SummaryWriter(log_dir=tbdir)
