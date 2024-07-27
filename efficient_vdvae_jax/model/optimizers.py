@@ -2,6 +2,7 @@ from typing import Any, Callable, Optional, Union
 from optax._src.base import Params, identity, ScalarOrSchedule
 from optax._src import combine
 from optax._src import transform
+from optax import scale_by_learning_rate
 
 from hparams import HParams
 
@@ -68,7 +69,7 @@ class BaseWeightDecayOptimizer:
             assert self.l2_weight != 0.
             transforms.append(transform.add_decayed_weights(weight_decay=self.l2_weight, mask=self.l2_mask))
 
-        transforms.append(_scale_by_learning_rate(self.learning_rate))
+        transforms.append(scale_by_learning_rate(self.learning_rate))
         return transforms
 
     def create_transforms(self):
