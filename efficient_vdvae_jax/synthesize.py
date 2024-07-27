@@ -13,10 +13,10 @@ from hparams import HParams
 # Initialize hparams before any other imports
 hparams = HParams('.', name="efficient_vdvae")
 
-from jax.config import config
+import jax
 
 # Set default precision for dots and conv ops to TF32
-config.update("jax_default_matmul_precision", 'tensorfloat32')
+jax.config.update("jax_default_matmul_precision", 'tensorfloat32')
 
 import jax
 from jax.flatten_util import ravel_pytree
@@ -25,29 +25,21 @@ import jax.random as random
 import jax.numpy as jnp
 from numpy.random import seed
 
-try:
-    from .model.model import UniversalAutoEncoder
-    from .model.optimizers import get_optimizer
-    from .model.schedules import get_lr_schedule
-    from .utils.utils import assert_CUDA_and_hparams_gpus_are_equal, create_checkpoint_dir, load_checkpoint_if_exists, get_logdir, get_l2_mask_from_params
-    from .data.generic_data_loader import create_synthesis_generic_dataset
-    from .data.cifar10_data_loader import create_synthesis_cifar10_dataset
-    from .data.mnist_data_loader import create_synthesis_mnist_dataset
-    from .data.imagenet_data_loader import create_synthesis_imagenet_dataset
-    from .utils.inference_helpers import synthesize
-    from .utils.ema_train_state import EMATrainState
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-except (ImportError, ValueError):
-    from model.model import UniversalAutoEncoder
-    from model.optimizers import get_optimizer
-    from model.schedules import get_lr_schedule
-    from utils.utils import assert_CUDA_and_hparams_gpus_are_equal, create_checkpoint_dir, load_checkpoint_if_exists, get_logdir, get_l2_mask_from_params
-    from data.generic_data_loader import create_synthesis_generic_dataset
-    from data.cifar10_data_loader import create_synthesis_cifar10_dataset
-    from data.mnist_data_loader import create_synthesis_mnist_dataset
-    from data.imagenet_data_loader import create_synthesis_imagenet_dataset
-    from utils.inference_helpers import synthesize
-    from utils.ema_train_state import EMATrainState
+
+from efficient_vdvae_jax.model.model import UniversalAutoEncoder
+from efficient_vdvae_jax.model.optimizers import get_optimizer
+from efficient_vdvae_jax.model.schedules import get_lr_schedule
+from efficient_vdvae_jax.utils.utils import assert_CUDA_and_hparams_gpus_are_equal, create_checkpoint_dir, load_checkpoint_if_exists, get_logdir, get_l2_mask_from_params
+from efficient_vdvae_jax.data.generic_data_loader import create_synthesis_generic_dataset
+from efficient_vdvae_jax.data.cifar10_data_loader import create_synthesis_cifar10_dataset
+from efficient_vdvae_jax.data.mnist_data_loader import create_synthesis_mnist_dataset
+from efficient_vdvae_jax.data.imagenet_data_loader import create_synthesis_imagenet_dataset
+from efficient_vdvae_jax.utils.inference_helpers import synthesize
+from efficient_vdvae_jax.utils.ema_train_state import EMATrainState
 
 
 def main():
