@@ -1,7 +1,6 @@
 from typing import Any, Callable, Optional, Union
-from optax._src.base import Params, identity
+from optax._src.base import Params, identity, ScalarOrSchedule
 from optax._src import combine
-from optax._src.alias import _scale_by_learning_rate, ScalarOrSchedule
 from optax._src import transform
 
 from hparams import HParams
