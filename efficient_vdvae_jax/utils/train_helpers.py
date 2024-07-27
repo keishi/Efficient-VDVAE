@@ -102,6 +102,7 @@ def change_unit_of_metrics(metrics):
 
 
 def train_step(rng, state, train_inputs, train_targets, skip_counter):
+    print("train_step")
     # Forward step + gradient computation
     grad_fn = jax.value_and_grad(forward_fn, has_aux=True, argnums=0)
     (_, (logits, metrics)), grads = grad_fn(state.params, rng, state, train_inputs, train_targets, hparams.train.batch_size, training=True)
@@ -162,6 +163,7 @@ def train(rng, state, train_data, val_data, tb_writer_train, tb_writer_val, chec
 
     # Wrap entire training code in jax mesh to designate device partition
     for global_step, (train_inputs, train_targets) in zip(range(initial_step, hparams.train.total_train_steps), train_data):
+        print(f'global_step: {global_step:08d} | ', end='\r')
         # Train step
         rng, *train_step_rng = random.split(rng, num=jax.local_device_count() + 1)
         train_step_rng = jax.device_put_sharded(train_step_rng, devices)
